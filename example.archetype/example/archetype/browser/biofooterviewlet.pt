@@ -1,0 +1,10 @@
+
+<div id="block1" >
+
+<img tal:attributes="src view/have_score" />
+<span tal:content="view/have_desc"/>
+           
+
+</div>
+ 
+

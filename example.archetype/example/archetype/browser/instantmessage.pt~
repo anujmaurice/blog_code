@@ -1,0 +1,48 @@
+<html metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone" >
+
+
+<body >
+<metal:css fill-slot="style_slot">
+  <style type="text/css" media="all" tal:attributes="href context/++resource++prettify.css"></style>
+</metal:css>
+<tal:js metal:fill-slot="javascript_head_slot">
+
+    <!-- This include it's needed if you are using a Plone version older than 3.1
+
+          <script type="text/javascript" src="jquery.js"></script> 
+
+    /-->
+
+    <script type="text/javascript" tal:attributes="src context/++resource++prettify.js"></script>
+<script>
+alert("hello idiot!!");
+</script>
+
+</tal:js>
+
+
+<div metal:fill-slot="main"
+     tal:define="priority here/getPriority;
+                 priority_color python:(priority == 'high' and 'red') or (priority == 'low' and 'green') or ''" >
+
+        <h1 tal:content="context/Title" 
+            tal:attributes="style string:color:$priority_color" >
+          Title
+        </h1>
+
+        <p tal:content="structure here/getBody" />          
+
+        <div class="documentByLine">
+	  portal <span tal:content="context/++resource++prettify.css"/>
+          Message by <span tal:content="context/Creator" /> 
+          with <strong tal:content="priority" /> priority.
+          -
+          <span tal:replace="python:here.toLocalizedTime(context.CreationDate(),long_format=1)" />
+        </div>
+    
+</div>
+
+</body>
+
+</html>
