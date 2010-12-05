@@ -14,6 +14,12 @@ from example.archetype.interfaces import IInstantMessage
 
 from plone.memoize.instance import memoize
 
+from kss.core import kssaction
+from plone.app.kss.plonekssview import PloneKSSView
+from zope.interface import implements, alsoProvides
+from plone.app.layout.globals.interfaces import IViewView
+from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
+
 import pdb
 
 class ActivityReportView(BrowserView):
@@ -91,5 +97,46 @@ class ActivityReportView(BrowserView):
                 dict["2"]=""
                 dict["3"]=""
 	return dict
+
+class ActivityReportVieww(BrowserView):
+    """View for showing recent cinema and film modifications
+    """
+        
+    template = ViewPageTemplateFile('morer.pt')
+        
+    def __call__(self):
+        # Hide the editable-object border
+        self.request.set('disable_border', True)
+
+        return self.template()
+    def score(self):
+        return "111"
+
         
  
+class DynamicActivityReportView(PloneKSSView):
+    """View for showing recent cinema and film modifications
+    """
+        
+    #render = ViewPageTemplateFile('Morer.pt')
+
+    @kssaction
+    def get_More(self,count):
+        print "##"*20
+        xtra1 = """<div id="more">
+<form action="http://localhost:8080/blog" method="get">
+<!-- <span class="kssattr-count-yep">MORE</span> -->
+<input type="submit" value="More" class="kssattr-count-yes submitting">
+</form>
+</div>"""
+        pdb.set_trace()
+        context = aq_inner(self.context)
+        catalog = getToolByName(context, 'portal_catalog')
+        results = []
+        alsoProvides(self, IViewView)
+
+        ksscore = self.getCommandSet('core')
+        zopecommands = self.getCommandSet('zope')
+        selector = ksscore.getHtmlIdSelector('more')
+        xtra = context.unrestrictedTraverse('Morer').template()
+        return ksscore.replaceHTML(selector,xtra,withKssSetup='True')

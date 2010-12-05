@@ -125,6 +125,12 @@
 
 	</div>
 </div>
+<div id="more">
+<form method="get"  tal:attributes="action context/absolute_url">
+<!-- <span class="kssattr-count-yep">MORE</span> -->
+<input class="kssattr-count-yes" type="submit" value="More"/>
+</form>
+</div>
 
 
 
