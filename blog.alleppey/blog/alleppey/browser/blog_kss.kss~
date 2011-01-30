@@ -1,0 +1,11 @@
+#more span:mousedown{
+      evt-click-preventdefault:true;
+      action-server:getMore;
+      getMore-count:kssAttr('count');
+}
+#more input:click{
+      evt-click-preventdefault:true;
+      action-server:getMore;
+      getMore-count:kssAttr('count');
+}
+

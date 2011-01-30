@@ -1,0 +1,39 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master">
+<body>
+
+<metal:css fill-slot="css_slot">
+    
+</metal:css>
+
+<metal:main fill-slot="main">
+    <tal:main-macro metal:define-macro="main">
+        
+        <form method="post" enctype="multipart/form-data"
+              tal:attributes="action string:${context/absolute_url}/${view/__name__}">
+              
+            <div i18n:translate="activity_report_days_searched">
+                Show changes in the the last
+                <input type="text" size="2" name="days"
+                    i18n:name="num_days" />
+		<input type="file" name="datafile" size="40">
+                days.
+                <input type="submit" class="context" name="form.button.UpdateDays"
+                    value="Refresh"
+                    i18n:name="submit_button"
+                    i18n:attributes="value" />
+            </div>
+              
+        </form>
+        
+  
+    </tal:main-macro>
+</metal:main>
+
+</body>
+</html>
+

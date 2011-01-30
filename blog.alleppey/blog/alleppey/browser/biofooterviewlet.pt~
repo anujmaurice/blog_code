@@ -1,0 +1,9 @@
+
+<div id="block1" >
+
+<img tal:attributes="src view/have_score"  width="128" height="128" />
+           
+
+</div>
+ 
+

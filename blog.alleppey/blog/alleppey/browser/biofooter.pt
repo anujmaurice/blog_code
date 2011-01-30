@@ -1,0 +1,41 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master">
+<body>
+
+<metal:css fill-slot="css_slot">
+    
+</metal:css>
+
+<metal:main fill-slot="main">
+    <tal:main-macro metal:define-macro="main">
+        
+        <form method="post" enctype="multipart/form-data"
+              tal:attributes="action string:${context/absolute_url}/${view/__name__}">
+              
+            <div i18n:translate="activity_report_days_searched">
+
+		<input type="file" name="datafile" size="40">
+
+<textarea id="description" cols="40" name="description" rows="5" class="blurrable firstToFocus" tal:content="view/have_desc">
+</textarea>
+        <input type="submit" class="context" name="biofooter.submit"
+                    value="Submit"
+                    i18n:name="submit_button"
+                    i18n:attributes="value"/>
+            </div>
+              
+        </form>
+        
+  
+    </tal:main-macro>
+</metal:main>
+    <metal:block i18n:domain="plone" tal:condition="not:ajax_load">
+        <div tal:replace="structure provider:plone.portalfooter" />
+    </metal:block>
+</body>
+</html>
+

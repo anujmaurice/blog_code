@@ -1,0 +1,118 @@
+# Zope3 imports
+from zope.interface import implements
+
+# CMF imports
+from Products.CMFCore import permissions
+
+# Archetypes & ATCT imports
+from Products.Archetypes import atapi
+from Products.ATContentTypes.content import base
+from Products.ATContentTypes.content import schemata
+
+# Product imports
+from blog.alleppey import config
+import pdb
+from blog.alleppey.interfaces import IInstantMessage
+from blog.alleppey import exampleMessageFactory as _
+
+#custom :anuj
+#import pdb
+from Products.CMFCore.utils import getToolByName
+from Acquisition import aq_parent
+import datetime
+import DateTime
+##end custom
+# Schema definition
+def create_message(notf,event):
+#    pdb.set_trace()
+    print "IN create_message "
+
+def not_message(notf,event):
+    now = datetime.datetime.now()
+    year_flag,month_flag,day_flag = 0,0,0
+    print "__"*100
+    pdb.set_trace()
+    notf.title = notf.title.replace(" ","-")
+    urltool = getToolByName(notf, "portal_url")
+    portal  = urltool.getPortalObject()
+    parent  = aq_parent(notf)
+    #cb_cut_data = portal.manage_cutObjects([notf.title])
+    cb_cut_data = parent.manage_cutObjects([notf.title])
+    try:
+        folder  = getattr(portal, "blog")
+    except:
+        portal.invokeFactory(type_name='Folder', id=str("blog"))
+        folder = getattr(portal,str("blog"))
+        
+
+    now_year,now_month,now_day = now.year,now.month,now.day
+
+    try:
+        year = getattr(folder,str(now_year))
+        if notf.customDate:
+            #notf.customDate = DateTime.DateTime('%s/%s/%s'%(now_year,now_month,now_day))
+            now_year,now_month,now_day = notf.customDate.year(),notf.customDate.month(),notf.customDate.day()
+        if year:
+            year_flag = 1
+            month = getattr(year,str(now_month))
+            if month:
+                month_flag=1
+                day = getattr(month,str(now_day))
+                if day:
+                    day_flag = 1
+    except AttributeError:
+        if year_flag !=1:
+            #pdb.set_trace()
+            
+            folder.invokeFactory(type_name='Folder', id=str(now_year))
+            year = getattr(folder,str(now_year))
+            year.invokeFactory(type_name='Folder', id=str(now_month))
+            month = getattr(year,str(now_month))
+            day = month.invokeFactory(type_name='Folder', id=str(now_day))
+            day = getattr(month,str(now_day))
+            year_flag,month_flag,day_flag = 1,1,1
+        if month_flag !=1:
+            year.invokeFactory(type_name='Folder', id=str(now_month))
+            month = getattr(year,str(now_month))
+            month.invokeFactory(type_name='Folder', id=str(now_day))
+            day = getattr(month,str(now_day))
+            month_flag,day_flag = 1,1
+        if day_flag !=1:
+            month.invokeFactory(type_name='Folder', id=str(now_day))
+            day = getattr(month,str(now_day))
+            
+    day.manage_pasteObjects(cb_cut_data)
+    #pdb.set_trace()
+
+schema = schemata.ATContentTypeSchema.copy() + atapi.Schema((
+
+  atapi.StringField('priority',
+              vocabulary = config.MESSAGE_PRIORITIES,
+              default = 'normal',
+              widget = atapi.SelectionWidget(label = _(u'Priority')),
+             ),
+  atapi.DateTimeField('customDate',
+              widget = atapi.CalendarWidget(label=_(u'Custom Date')),
+              ),
+  atapi.TextField('body',
+            searchable = 1,
+            required = 1,
+            allowable_content_types = ('text/plain',
+                                       'text/structured',
+                                       'text/html',),
+            default_output_type = 'text/x-html-safe',
+            widget = atapi.RichWidget(label = _(u'Message Body')),
+           ),
+
+))
+
+
+class InstantMessage(base.ATCTContent):
+    """An Archetype for an InstantMessage application"""
+
+    implements(IInstantMessage)
+
+    schema = schema
+    
+# Content type registration for the Archetypes machinery
+atapi.registerType(InstantMessage, config.PROJECTNAME)

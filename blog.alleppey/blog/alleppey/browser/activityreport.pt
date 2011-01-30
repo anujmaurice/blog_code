@@ -1,0 +1,119 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+>
+  <body>
+
+    <metal:css fill-slot="css_slot">
+
+      <style type="text/css" media="all" tal:attributes="href context/++resource++blog.css"></style>
+
+    </metal:css>
+
+    <metal:main fill-slot="main">
+      <tal:main-macro metal:define-macro="main"
+		      tal:define="blogs view/recently_modified_blogs;latestblog view/latest;">
+
+        
+        <p tal:condition="not:blogs" i18n:translate="description_no_blogs_found">
+          No blogs found.
+        </p>
+
+	<div id="latestpost">
+	  <h2 tal:content="latestblog/title"/>
+	  <h3 tal:content="latestblog/description"/>
+	</div>
+
+	<div class="colmask threecol" tal:repeat="blog blogs" >
+	  <div class="colmid">
+	    <div class="colleft">
+	      <div tal:condition="blog/2" i18n:translate="description_no_blogs_found">
+		<div class="col1">
+		  <!-- Column 1 start -->
+		  <div id="block1" >
+		    <a tal:attributes="href blog/2/url;" > <h2 tal:content="blog/2/title" /> </a>
+		    <a tal:attributes="href blog/2/url;" >	<h3 tal:content="blog/2/description" /> </a>
+		    <p>
+		      by <em> <a tal:attributes="title blog/2/description;
+						 href blog/2/url"
+				 tal:content="blog/2/creator" /> 
+			
+			on <a tal:attributes="title blog/2/date;" tal:content="blog/2/date" />
+		      </em>
+		    </p>
+		    <span tal:repeat="tag blog/2/subject">
+		      <a class="large green button" tal:content="tag"/>
+		    </span>
+		  </div>
+		  <!-- Column 1 end -->
+		</div>
+	      </div>
+	      <div tal:condition="blog/1" i18n:translate="description_no_blogs_found">
+		<div class="col2">
+		  <!-- Column 2 start -->
+		  <div id="block1" >
+		    <a tal:attributes="href blog/1/url;" > <h2 tal:content="blog/1/title" /> </a>
+		    <a tal:attributes="href blog/1/url;" >	<h3 tal:content="blog/1/description" /> </a>
+		    <p>
+		      by <em> <a tal:attributes="title blog/1/description;
+						 href blog/1/url"
+				 tal:content="blog/1/creator" /> 
+			
+			on <a tal:attributes="title blog/1/date;" tal:content="blog/1/date" />
+		      </em>
+		    </p>
+		    <span tal:repeat="tag blog/1/subject">
+		      <a class="large green button" tal:content="tag"/>
+		    </span>
+		  </div>
+		  <!-- Column 2 end -->
+		</div>
+	      </div>
+	      <div tal:condition="blog/3" i18n:translate="description_no_blogs_found">
+		
+		<div class="col3">
+		  
+		  <!-- Column 3 start -->
+		  <div id="block1" >
+		    <a tal:attributes="href blog/3/url;" > <h2 tal:content="blog/3/title" /> </a>
+		    <a tal:attributes="href blog/3/url;" >	<h3 tal:content="blog/3/description" /> </a>
+		    <p>
+		      by <em> <a tal:attributes="title blog/3/description;
+						 href blog/3/url"
+				 tal:content="blog/3/creator" /> 
+			
+			on <a tal:attributes="title blog/3/date;" tal:content="blog/3/date" />
+		      </em>
+		    </p>
+		    <span tal:repeat="tag blog/3/subject">
+		      <a class="large green button" tal:content="tag"/>
+		    </span>
+		  </div>
+		  <!-- Column 3 end -->
+		</div>
+
+              </div>
+	    </div>
+
+	  </div>
+	</div>
+	<div id="more">
+	  <form method="get"  tal:attributes="action context/absolute_url">
+	    <!-- <span class="kssattr-count-yep">MORE</span> -->
+	    <input class="kssattr-count-yes" type="submit" value="More"/>
+	  </form>
+	</div>
+
+
+
+
+
+      </tal:main-macro>
+    </metal:main>
+
+  </body>
+</html>
+
